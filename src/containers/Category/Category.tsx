@@ -1,8 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectCategories, selectFetchCategoriesLoading } from '../../store/categories/categoriesSlice';
-import { fetchCategories } from '../../store/categories/categoriesThunk';
+import {
+  selectCategories,
+  selectDeleteCategoryLoading,
+  selectFetchCategoriesLoading,
+} from '../../store/categories/categoriesSlice';
+import { deleteCategory, fetchCategories } from '../../store/categories/categoriesThunk';
 import Spinner from '../../components/Spinner/Spinner';
 import CategoryCard from '../../components/CategoryCard/CategoryCard';
 
@@ -10,17 +14,19 @@ const Category = () => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories);
   const categoriesLoading = useAppSelector(selectFetchCategoriesLoading);
+  const deleteLoading = useAppSelector(selectDeleteCategoryLoading);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
 
-  const deleteCategory = (id: string) => {
+  const deleteCard = async (id: string) => {
     const result = confirm('Do you want to delete? ');
 
     if (result) {
-      console.log(id);
+      await dispatch(deleteCategory(id));
+      await dispatch(fetchCategories());
     }
   };
 
@@ -34,7 +40,8 @@ const Category = () => {
         <CategoryCard
           key={category.id}
           category={category}
-          deleteCategory={(id) => deleteCategory(id)}
+          deleteLoading={deleteLoading}
+          deleteCategory={(id) => deleteCard(id)}
         />
       ))}
     </>

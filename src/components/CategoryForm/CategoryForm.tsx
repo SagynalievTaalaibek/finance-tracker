@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import ButtonSpinner from '../Spinner/ButtonSpinner';
 import { Category } from '../../types';
 
+const initialState: Category = {
+  type: '',
+  name: '',
+};
+
 interface Props {
+  existingCategory?: Category;
   onSubmit: (category: Category) => void;
   isLoading: boolean;
-  title: string;
+  isEdit?: boolean;
 }
 
-const CategoryForm: React.FC<Props> = ({ onSubmit, title, isLoading }) => {
-  const [category, setCategory] = useState({
-    type: '',
-    name: '',
-  });
+const CategoryForm: React.FC<Props> = ({ existingCategory = initialState, onSubmit, isEdit = false, isLoading }) => {
+  const [category, setCategory] = useState<Category>(existingCategory);
 
   const changeCategory = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setCategory((prev) => ({
@@ -24,15 +27,11 @@ const CategoryForm: React.FC<Props> = ({ onSubmit, title, isLoading }) => {
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(category);
-    setCategory({
-      type: '',
-      name: '',
-    });
   };
 
   return (
     <form onSubmit={onFormSubmit}>
-      <h4>{title} category</h4>
+      <h4>{isEdit ? 'Edit ' : 'Add '} category</h4>
       <div className='form-group my-2'>
         <label htmlFor='type'>Type</label>
         <select
