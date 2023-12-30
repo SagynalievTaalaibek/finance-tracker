@@ -7,20 +7,19 @@ import { Category } from '../../types';
 
 const AddEditCategory = () => {
   const dispatch = useAppDispatch();
-  const {paramsId} = useParams();
+  const params = useParams();
   const navigate = useNavigate();
   const createLoading = useAppSelector(selectCreateCategoryLoading);
 
   let title = 'Add';
 
-  if (paramsId) {
+  if (params.id) {
     title = 'Edit';
   }
 
   const sendCategory = async (category: Category) => {
     await dispatch(createCategory(category));
     navigate('/categories');
-    console.log(category);
   };
 
   return (

@@ -1,16 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createCategory } from './categoriesThunk';
+import { createCategory, fetchCategories } from './categoriesThunk';
 import { RootState } from '../../app/store';
 import { ApiCategory } from '../../types';
 
 interface CategoriesState {
   categories: ApiCategory[];
   createNewCategoryLoading: boolean;
+  fetchAllCategoriesLoading: boolean;
 }
 
 const initialState: CategoriesState = {
   categories: [],
   createNewCategoryLoading: false,
+  fetchAllCategoriesLoading: false,
 };
 
 
@@ -29,6 +31,16 @@ export const categoriesSlice = createSlice({
       state.createNewCategoryLoading = false;
     });
 
+    builder.addCase(fetchCategories.pending, (state) => {
+      state.fetchAllCategoriesLoading = true;
+    });
+    builder.addCase(fetchCategories.fulfilled, (state, { payload: items }) => {
+      state.fetchAllCategoriesLoading = false;
+      state.categories = items;
+    });
+    builder.addCase(fetchCategories.rejected, (state) => {
+      state.fetchAllCategoriesLoading = false;
+    });
   },
 });
 
@@ -37,9 +49,8 @@ export const selectCategories = (state: RootState) => state.category.categories;
 // export const selectDish = (state: RootState) => state.dishes.dish;
 
 export const selectCreateCategoryLoading = (state: RootState) => state.category.createNewCategoryLoading;
-
+export const selectFetchCategoriesLoading = (state: RootState) => state.category.fetchAllCategoriesLoading;
 /*
-export const selectFetchDishLoading = (state: RootState) => state.dishes.fetchLoading;
 export const selectDeleteDishLoading = (state: RootState) => state.dishes.deleteLoading;
 export const selectCreateDishLoading = (state: RootState) => state.dishes.createLoading;
 export const selectFetchOneDishLoading = (state: RootState) => state.dishes.fetchOneLoading;

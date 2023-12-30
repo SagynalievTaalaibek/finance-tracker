@@ -8,3 +8,7 @@ export interface ApiCategory {
   type: string;
   name: string;
 }
+
+export interface ApiCategoryList {
+  [key: string]: Category;
+}
