@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Transaction, TransactionMutation } from '../../types';
-import { useAppSelector } from '../../app/hooks';
-import { selectCategories } from '../../store/categories/categoriesSlice';
+import { ApiCategory, Transaction, TransactionMutation } from '../../types';
+import ButtonSpinner from '../Spinner/ButtonSpinner';
 
 interface Props {
   existingTransaction?: TransactionMutation;
   onSubmit: (element: Transaction) => void;
   isEdit?: boolean;
+  isLoading: boolean;
+  categories: ApiCategory[];
 }
 
 const initialState: TransactionMutation = {
@@ -16,10 +17,8 @@ const initialState: TransactionMutation = {
 };
 
 
-const TransactionForm: React.FC<Props> = ({ onSubmit, existingTransaction = initialState, isEdit }) => {
+const TransactionForm: React.FC<Props> = ({ onSubmit, existingTransaction = initialState, isEdit, categories, isLoading }) => {
   const [transaction, setTransaction] = useState<TransactionMutation>(existingTransaction);
-  const categories = useAppSelector(selectCategories);
-  // const loading = useAppSelector(select);
 
 
   const onChangeTransaction = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -98,10 +97,10 @@ const TransactionForm: React.FC<Props> = ({ onSubmit, existingTransaction = init
         <button
           type='submit'
           className='btn btn-primary'
-          // disabled={isLoading}
+          disabled={isLoading}
         >
-          {/* {isLoading && <ButtonSpinner />}*/}
-          Save
+          {isLoading && <ButtonSpinner />}
+          Crete
         </button>
       </form>
     </>
