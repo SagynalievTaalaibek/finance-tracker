@@ -13,10 +13,10 @@ const CategoryCard: React.FC<Props> = ({ category, deleteCategory, deleteLoading
   const navigate = useNavigate();
 
   return (
-    <div className='card mb-2' key={category.id}>
+    <div className='card mb-2'>
       <div className='card-body d-flex justify-content-between'>
         {category.name}
-        <div className=''>
+        <div>
           <strong className='card-text me-5'>{category.type}</strong>
           <button className='btn btn-primary me-2'
                   onClick={() => navigate(`/categories/${category.id}/edit`)}>Edit
